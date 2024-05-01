@@ -8,7 +8,7 @@ pipeline {
         }
         stage('test') {
             steps {
-                echo "goodbye World!"
+                echo "Github says Hi!"
             }
         }
     }
