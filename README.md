@@ -1,2 +1,2 @@
 # Jenkins-test
-hello this is, test repo for jenkins integration
+hello this is a test repo for jenkins integration
