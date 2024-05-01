@@ -1,5 +1,9 @@
 node {
 	stage('Test') {
-		echo 'Hello Github'
+		echo 'Hi There!..'
 	}
+	stage('Build') {
+                echo 'From Github!'
+        }
+
 }
