@@ -3,13 +3,6 @@ node {
 		echo 'Building..'
 	}
 	stage('Test') {
-		echo 'Testing..'
+		echo 'Hello Github'
 	}
-	try {
-		stage('Deploy') {
-			echo 'Deploying..'
-		}
-	} catch (Exception e) {
-			echo 'Deployment failed.'
-		}
 }
