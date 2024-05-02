@@ -92,6 +92,7 @@ $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 - Check the Jenkins dashboard for build status and output .....
 
 
+![Screenshot from 2024-05-01 20-41-48](https://github.com/Mahfouz98/Jenkins-test/assets/145352617/0399c7ef-f861-4af9-b61a-ddd6761cabdc)
 
 
 
