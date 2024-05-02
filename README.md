@@ -1,51 +1,17 @@
-# Automated Build and Test with Jenkins on EC2 Instance
+# Integration Jenkins with Github Actions
 
 ## Project Setup
 
 ### Tools Needed
-- EC2 instance on AWS with docker installed
-- Jenkins container 
+- EC2 instance on AWS with Jenkins
 - GitHub account
-- Gitbash on your local host
 
 ## Installation and Configuration Guide
 ### 1. **Prepare GitHub Repository:**
    - Create or select a GitHub repository.
    - Apply the Git Flow model.
-```bash
-#using git bash clone your repo
-$git clone "your repo"
-
-$git flow init
-
-
-$ vim Jenkinsfile
-
-
-# paste these lines in the file
-pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
-    }
-}
-
-
+```
+# Edit your Jenkinsfile
 # Save and Exit
 
 
@@ -55,39 +21,52 @@ $ git commit -m "Add Jenkinsfile"
 $ git push <repo> develop
 
 # check your develop branch on github repo
-
 ```
 
-### 2. **Installing Jenkins container on EC2:**
+### 2. **Installing Jenkins on EC2:**
 
-```bash
+**Adding Jenkins Repo Into Ec2**
 
-$ sudo yum update -y
-$ sudo yum install docker -y
-$ sudo service docker start
-$ docker run -p 8080:8080 -p 50000:50000 -d -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+`sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo`
+    
+**Adding Repo Key**
+
+`sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key`
+
+**Installing Dependencies (Java)**
+
+`sudo yum install java-17-amazon-corretto-devel -y`
+
+**Install Jenkins**
+
+`sudo dnf install jenkins`
+
+**Start and enable Jenkins service**
+
+```
+systemctl enable --now jenkins
+sudo systemctl daemon-reload
 ```
 
-### Note :
-**Add Inbound rule in the security group of the EC2 instance:**
+
+### Add Inbound rule in the security group of the EC2 instance
 - Type: Custom TCP
 - Port Range: 8080
 - source: 0.0.0.0/0
 
 ### Accessing Jenkins:
-- Go to web browser and write : http://(ec2-public-ip)>:8080
-- run the following command inside your container to get Jenkins password
+- Go to web browser and write : http://"ec2-public-ip":8080
+- To get Jenkins password
 ```bash
 $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
-- Copy password to Jenkins tab and sign in
-
 
 ### 3. **Configure Jenkins:**
    - **Install necessary plugins in Jenkins such as Git and Pipeline.**
    - **Connect Jenkins to GitHub.**
         - Go to "Manage Jenkins" > "Manage Plugins" > "Available" and install "GitHub Integration Plugin".
-     - Set up credentials in Jenkins for GitHub (username and token).
+     - Set up credentials in Jenkins for GitHub (username and ssh key).
    - **Create a new pipeline job.**
      - Select "New Item", name your pipeline , and choose "Pipeline" as the type.
      - In the pipeline configuration, select "Pipeline script from SCM" and choose "Git" as the SCM.
@@ -100,7 +79,7 @@ $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 **Set up webhooks in GitHub to trigger Jenkins builds on push events.**
 - In GitHub, go to your repository settings and select **"Webhooks"**.
 - **Add a new webhook:**
-   - Payload URL: http://<your-jenkins-url>:8080/github-webhook/
+   - Payload URL: http://"your-jenkins-url":8080/github-webhook/
    - Content type: **application/json**
    - Select **"Just the push event"**.
    - Ensure the webhook is active
