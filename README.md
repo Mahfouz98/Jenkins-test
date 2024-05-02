@@ -56,7 +56,7 @@ sudo systemctl daemon-reload
 - source: 0.0.0.0/0
 
 ### Accessing Jenkins:
-- Go to web browser and write : http://"ec2-public-ip":8080
+- Go to web browser and write : `http://<ec2-public-ip>:8080`
 - To get Jenkins password
 ```bash
 $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
@@ -79,7 +79,7 @@ $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 **Set up webhooks in GitHub to trigger Jenkins builds on push events.**
 - In GitHub, go to your repository settings and select **"Webhooks"**.
 - **Add a new webhook:**
-   - Payload URL: http://"your-jenkins-url":8080/github-webhook/
+   - Payload URL: `http://<your-jenkins-url>:8080/github-webhook/`
    - Content type: **application/json**
    - Select **"Just the push event"**.
    - Ensure the webhook is active
